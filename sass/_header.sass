@@ -1,13 +1,16 @@
 .header
+    position: relative
     min-height: 100vh
     background: url('../img/bg.png') center no-repeat
     background-size: cover
     cursor: url('../img/cursor.png'), auto
+    overflow: hidden
     &__hero
         margin-left: 112px
         padding-top: 210px
         font-family: 'Lexend', sans-serif
         width: 60%
+        z-index: 10
     &__title
         font-size: 96px
         font-weight: 700
@@ -17,6 +20,7 @@
         font-weight: 500
         margin-bottom: 38px
         line-height: 1.5
+        width: 80%
     &__btn
         width: 248px
         height: 68px
@@ -25,3 +29,17 @@
     position: absolute
     top: 0
     left: 0
+
+@media screen and ( max-width: 1400px )
+    .header
+        &__hero
+            width: 70%
+            padding-top: 150px
+        &__title
+            font-size: 72px
+        &__subtitle
+            font-size: 20px
+@media screen and ( max-width: 1150px )
+    .header
+        &__hero
+            width: 80%
