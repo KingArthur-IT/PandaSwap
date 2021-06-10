@@ -6,17 +6,20 @@
     background-color: #fff
     max-height: 80px
     display: flex
-    z-index: 2
+    z-index: 20
     &__logo
         max-width: 245px
         padding: 30px 50px
         border-right: 1px solid #F2F2F2
+        cursor: pointer
     &__img
         height: 100%
         max-width: 100%
 .menu
     padding-left: 106px
     display: flex
+    z-index: 2
+    cursor: pointer
     &__item
         position: relative
         display: block
@@ -28,7 +31,6 @@
         font-weight: 600
         font-size: 12px
         flex-wrap: wrap
-        cursor: pointer
         transition: all 0.5s ease-in-out
         overflow: hidden
         &:after
