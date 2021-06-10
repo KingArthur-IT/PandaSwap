@@ -6,19 +6,20 @@
     cursor: url('../img/cursor.png'), auto
     overflow: hidden
     &__hero
-        margin-left: 112px
-        padding-top: 210px
+        margin-left: 8%
+        padding-top: 10%//210px
         font-family: 'Lexend', sans-serif
         width: 60%
         z-index: 10
+        position: relative
     &__title
         font-size: 96px
         font-weight: 700
-        margin-bottom: 38px
+        margin-bottom: 2%
     &__subtitle
         font-size: 24px
         font-weight: 500
-        margin-bottom: 38px
+        margin-bottom: 3%
         line-height: 1.5
         width: 80%
     &__btn
@@ -31,16 +32,57 @@
     left: 0
     width: 100px
     height: 100px
-@media screen and ( max-width: 1400px )
+@media screen and ( max-width: 1440px )
     .header
         &__hero
             width: 70%
-            padding-top: 150px
+@media screen and ( max-width: 1200px )
+    .header
+        &__hero
+            width: 90%
+@media screen and ( max-width: 1000px )
+    .header
+        &__title
+            font-size: 86px
+        &__subtitle
+            width: 90%
+        &__hero
+            padding-top: 13%
+@media screen and ( max-width: 800px )
+    .header
         &__title
             font-size: 72px
         &__subtitle
-            font-size: 20px
-@media screen and ( max-width: 1150px )
+            width: 90%
+            font-size: 22px
+@media screen and ( max-width: 700px )
     .header
+        &__title
+            font-size: 68px
+            width: 95%
+        &__subtitle
+            width: 95%
+            font-size: 22px
         &__hero
-            width: 80%
+            padding-top: 20%
+@media screen and ( max-width: 600px )
+    .header
+        &__title
+            font-size: 58px
+        &__subtitle
+            width: 95%
+            font-size: 22px
+@media screen and ( max-width: 450px )
+    .header
+        &__title
+            font-size: 52px
+        &__subtitle
+            font-size: 22px
+        &__hero
+            padding-top: 25%
+@media screen and ( max-width: 350px )
+    .header
+        &__title
+            font-size: 48px
+        &__hero
+            padding-top: 30%

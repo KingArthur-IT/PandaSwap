@@ -14,6 +14,11 @@ class SceneObj{
         this.velocity.x += (this.position.x - this.start.x) * 0.001
         this.velocity.y += (this.position.y - this.start.y) * 0.001
 
+        if (Math.abs(this.position.x - this.start.x) < 3.0 && Math.abs(this.position.y - this.start.y) < 3.0) {
+            this.position.x = this.start.x;
+            this.position.y = this.start.y;
+        }
+
         let headerW = document.querySelector('.header').getBoundingClientRect().width,
             headerH = document.querySelector('.header').getBoundingClientRect().height
         headerW -= this.width
@@ -35,9 +40,10 @@ class SceneObj{
         document.getElementById(this.description + this.id).style.top = this.position.y + 'px'
         document.getElementById(this.description + this.id).style.left = this.position.x + 'px'
         document.getElementById(this.description + this.id).style.transform = 'rotate(' + this.angle + 'deg)'
-        
-        this.velocity.x *= 0.985
-        this.velocity.y *= 0.985
+    
+        this.velocity.x *= 0.99
+        this.velocity.y *= 0.99
+
     }
     addVelocity(vx, vy) {
         this.velocity.x += vx * 0.5
@@ -55,8 +61,8 @@ let mouse = {
     end: {x: 0, y: 0}
 }
 
-const pandaPositionX = [0.08, 0.5, 0.3, 0.69, 0.9]
-const pandaPositionY = [0.8,  0.87, 0.7, 0.55, 0.85] 
+const pandaPositionX = [0.08, 0.5, 0.3, 0.69, 0.88]
+const pandaPositionY = [0.8,  0.81, 0.75, 0.55, 0.8] 
 const pandaAngle = [0, -20, -120, 20, 45]
 const pandaImgSrc = './img/panda.png';
 const pandaSize = 172;
@@ -79,80 +85,23 @@ const bambooLongSizeY = 204;
 let bambooLongArray = [];
 
 window.onload = () => {
-    let width = document.querySelector('.header').getBoundingClientRect().width,
-        height = document.querySelector('.header').getBoundingClientRect().height
-    //create pandas
-    for (let index = 0; index < pandaPositionX.length; index++) {
-        pandasArray.push(new SceneObj(
-            'panda',
-            width * pandaPositionX[index],
-            height * pandaPositionY[index],
-            pandaSize,
-            pandaSize,
-            pandaAngle[index], index)
-        )
-        //add tag
-        document.querySelector('.header').innerHTML += '<img src="' + pandaImgSrc + '" alt="panda" class="sceneObj" id = "panda' + index + '">';
-        //style
-        document.getElementById('panda' + index).style.top = pandasArray[pandasArray.length - 1].position.y + 'px'
-        document.getElementById('panda' + index).style.left = pandasArray[pandasArray.length - 1].position.x + 'px'
-        document.getElementById('panda' + index).style.transform = 'rotate(' + pandaAngle[index] + 'deg)'
-        document.getElementById('panda' + index).style.width = pandaSize + 'px'
-        document.getElementById('panda' + index).style.height = pandaSize + 'px'
-    }
-    //create short bamboo
-    for (let index = 0; index < bambooShortPositionX.length; index++) {
-        bambooShortsArray.push(new SceneObj(
-            'bambooShort',
-            width * bambooShortPositionX[index],
-            height * bambooShortPositionY[index],
-            bambooShortSizeX,
-            bambooShortSizeY,
-            bambooShortAngle[index], index)
-        )
-        //add tag
-        document.querySelector('.header').innerHTML += '<img src="' + bambooShortImgSrc + '" alt="bamboo" class="sceneObj" id = "bambooShort' + index + '">';
-        //style
-        document.getElementById('bambooShort' + index).style.top = bambooShortsArray[bambooShortsArray.length - 1].position.y + 'px'
-        document.getElementById('bambooShort' + index).style.left = bambooShortsArray[bambooShortsArray.length - 1].position.x + 'px'
-        document.getElementById('bambooShort' + index).style.transform = 'rotate(' + bambooShortAngle[index] + 'deg)'
-        document.getElementById('bambooShort' + index).style.width = bambooShortSizeX + 'px'
-        document.getElementById('bambooShort' + index).style.height = bambooShortSizeY + 'px'
-    }
-    //create long bamboo
-    for (let index = 0; index < bambooLongPositionX.length; index++) {
-        bambooLongArray.push(new SceneObj(
-            'bambooLong',
-            width * bambooLongPositionX[index],
-            height * bambooLongPositionY[index],
-            bambooLongSizeX,
-            bambooLongSizeY,
-            bambooLongAngle[index], index)
-        )
-        //add tag
-        document.querySelector('.header').innerHTML += '<img src="' + bambooLongImgSrc + '" alt="bamboo" class="sceneObj" id = "bambooLong' + index + '">';
-        //style
-        document.getElementById('bambooLong' + index).style.top = bambooLongArray[bambooLongArray.length - 1].position.y + 'px'
-        document.getElementById('bambooLong' + index).style.left = bambooLongArray[bambooLongArray.length - 1].position.x + 'px'
-        document.getElementById('bambooLong' + index).style.transform = 'rotate(' + bambooLongAngle[index] + 'deg)'
-        document.getElementById('bambooLong' + index).style.width = bambooLongSizeX + 'px'
-        document.getElementById('bambooLong' + index).style.height = bambooLongSizeY + 'px'
-    }
-    //loop
-    function loop() {
-        pandasArray.forEach(i => {
-            i.move();
-        });
-        bambooShortsArray.forEach(i => {
-            i.move();
-        });
-        bambooLongArray.forEach(i => {
-            i.move();
-        });
-        requestAnimationFrame(loop)
-    }
+    initScene();
     loop();
 }
+//loop
+function loop() {
+    pandasArray.forEach(i => {
+        i.move();
+    });
+    bambooShortsArray.forEach(i => {
+        i.move();
+    });
+    bambooLongArray.forEach(i => {
+        i.move();
+    });
+    requestAnimationFrame(loop)
+}
+    
 
 document.addEventListener("mousemove", mouse_move_handler);
 function mouse_move_handler(e) {
@@ -188,5 +137,130 @@ function mouse_move_handler(e) {
         {
             bambooLong.addVelocity(mouse.end.x - mouse.start.x, mouse.end.y - mouse.start.y)
         }
+    }
+}
+
+function initScene() {
+    let width = document.querySelector('.header').getBoundingClientRect().width,
+        height = document.querySelector('.header').getBoundingClientRect().height,
+        koeff = width > 1440 ? 1.0 : 1.0 - (1024 - height) / 1024;
+    //create pandas
+    for (let index = 0; index < pandaPositionX.length; index++) {
+        pandasArray.push(new SceneObj(
+            'panda',
+            width * pandaPositionX[index],
+            height * pandaPositionY[index],
+            koeff * pandaSize,
+            koeff * pandaSize,
+            pandaAngle[index], index)
+        )
+        //add tag
+        document.querySelector('.header').innerHTML += '<img src="' + pandaImgSrc + '" alt="panda" class="sceneObj" id = "panda' + index + '">';
+        //style
+        document.getElementById('panda' + index).style.top = pandasArray[pandasArray.length - 1].position.y + 'px'
+        document.getElementById('panda' + index).style.left = pandasArray[pandasArray.length - 1].position.x + 'px'
+        document.getElementById('panda' + index).style.transform = 'rotate(' + pandaAngle[index] + 'deg)'
+        document.getElementById('panda' + index).style.width = koeff * pandaSize + 'px'
+        document.getElementById('panda' + index).style.height = koeff * pandaSize + 'px'
+    }
+    //create short bamboo
+    for (let index = 0; index < bambooShortPositionX.length; index++) {
+        bambooShortsArray.push(new SceneObj(
+            'bambooShort',
+            width * bambooShortPositionX[index],
+            height * bambooShortPositionY[index],
+            koeff * bambooShortSizeX,
+            koeff * bambooShortSizeY,
+            bambooShortAngle[index], index)
+        )
+        //add tag
+        document.querySelector('.header').innerHTML += '<img src="' + bambooShortImgSrc + '" alt="bamboo" class="sceneObj" id = "bambooShort' + index + '">';
+        //style
+        document.getElementById('bambooShort' + index).style.top = bambooShortsArray[bambooShortsArray.length - 1].position.y + 'px'
+        document.getElementById('bambooShort' + index).style.left = bambooShortsArray[bambooShortsArray.length - 1].position.x + 'px'
+        document.getElementById('bambooShort' + index).style.transform = 'rotate(' + bambooShortAngle[index] + 'deg)'
+        document.getElementById('bambooShort' + index).style.width = koeff * bambooShortSizeX + 'px'
+        document.getElementById('bambooShort' + index).style.height = koeff * bambooShortSizeY + 'px'
+    }
+    //create long bamboo
+    for (let index = 0; index < bambooLongPositionX.length; index++) {
+        bambooLongArray.push(new SceneObj(
+            'bambooLong',
+            width * bambooLongPositionX[index],
+            height * bambooLongPositionY[index],
+            koeff * bambooLongSizeX,
+            koeff * bambooLongSizeY,
+            bambooLongAngle[index], index)
+        )
+        //add tag
+        document.querySelector('.header').innerHTML += '<img src="' + bambooLongImgSrc + '" alt="bamboo" class="sceneObj" id = "bambooLong' + index + '">';
+        //style
+        document.getElementById('bambooLong' + index).style.top = bambooLongArray[bambooLongArray.length - 1].position.y + 'px'
+        document.getElementById('bambooLong' + index).style.left = bambooLongArray[bambooLongArray.length - 1].position.x + 'px'
+        document.getElementById('bambooLong' + index).style.transform = 'rotate(' + bambooLongAngle[index] + 'deg)'
+        document.getElementById('bambooLong' + index).style.width = koeff * bambooLongSizeX + 'px'
+        document.getElementById('bambooLong' + index).style.height = koeff * bambooLongSizeY + 'px'
+    }
+}
+window.addEventListener('resize', resize);
+
+function resize() {
+    pandasArray.length = [];
+    bambooShortsArray.length = [];
+    bambooLongArray.length = [];
+
+    let width = document.querySelector('.header').getBoundingClientRect().width,
+        height = document.querySelector('.header').getBoundingClientRect().height,
+        koeff = width > 1440 ? 1.0 : 1.0 - (1024 - height) / 1024;
+    //create pandas
+    for (let index = 0; index < pandaPositionX.length; index++) {
+        pandasArray.push(new SceneObj(
+            'panda',
+            width * pandaPositionX[index],
+            height * pandaPositionY[index],
+            koeff * pandaSize,
+            koeff * pandaSize,
+            pandaAngle[index], index)
+        )
+        //style
+        document.getElementById('panda' + index).style.top = pandasArray[pandasArray.length - 1].position.y + 'px'
+        document.getElementById('panda' + index).style.left = pandasArray[pandasArray.length - 1].position.x + 'px'
+        document.getElementById('panda' + index).style.transform = 'rotate(' + pandaAngle[index] + 'deg)'
+        document.getElementById('panda' + index).style.width = koeff * pandaSize + 'px'
+        document.getElementById('panda' + index).style.height = koeff * pandaSize + 'px'
+    }
+    //create short bamboo
+    for (let index = 0; index < bambooShortPositionX.length; index++) {
+        bambooShortsArray.push(new SceneObj(
+            'bambooShort',
+            width * bambooShortPositionX[index],
+            height * bambooShortPositionY[index],
+            koeff * bambooShortSizeX,
+            koeff * bambooShortSizeY,
+            bambooShortAngle[index], index)
+        )
+        //style
+        document.getElementById('bambooShort' + index).style.top = bambooShortsArray[bambooShortsArray.length - 1].position.y + 'px'
+        document.getElementById('bambooShort' + index).style.left = bambooShortsArray[bambooShortsArray.length - 1].position.x + 'px'
+        document.getElementById('bambooShort' + index).style.transform = 'rotate(' + bambooShortAngle[index] + 'deg)'
+        document.getElementById('bambooShort' + index).style.width = koeff * bambooShortSizeX + 'px'
+        document.getElementById('bambooShort' + index).style.height = koeff * bambooShortSizeY + 'px'
+    }
+    //create long bamboo
+    for (let index = 0; index < bambooLongPositionX.length; index++) {
+        bambooLongArray.push(new SceneObj(
+            'bambooLong',
+            width * bambooLongPositionX[index],
+            height * bambooLongPositionY[index],
+            koeff * bambooLongSizeX,
+            koeff * bambooLongSizeY,
+            bambooLongAngle[index], index)
+        )
+        //style
+        document.getElementById('bambooLong' + index).style.top = bambooLongArray[bambooLongArray.length - 1].position.y + 'px'
+        document.getElementById('bambooLong' + index).style.left = bambooLongArray[bambooLongArray.length - 1].position.x + 'px'
+        document.getElementById('bambooLong' + index).style.transform = 'rotate(' + bambooLongAngle[index] + 'deg)'
+        document.getElementById('bambooLong' + index).style.width = koeff * bambooLongSizeX + 'px'
+        document.getElementById('bambooLong' + index).style.height = koeff * bambooLongSizeY + 'px'
     }
 }
