@@ -1,7 +1,7 @@
 class SceneObj{
-    constructor(description, x, y, w, h, alfa, i) {
-        this.start = { x: x, y: y };
-        this.position = { x: x, y: y };
+    constructor(description, sx, sy, px, py, w, h, alfa, i) {
+        this.start = { x: sx, y: sy };
+        this.position = { x: px, y: py };
         this.velocity = { x: 0, y: 0 };
         this.startAngle = alfa;
         this.angle = alfa;
@@ -11,14 +11,22 @@ class SceneObj{
         this.description = description;
     }
     move() {
-        this.velocity.x += (this.position.x - this.start.x) * 0.001
-        this.velocity.y += (this.position.y - this.start.y) * 0.001
+        let dx = this.position.x - this.start.x
+        let dy = this.position.y - this.start.y
 
-        if (Math.abs(this.position.x - this.start.x) < 3.0 && Math.abs(this.position.y - this.start.y) < 3.0) {
+        dx = dx > 100 ? dx * 0.001 : dx * 0.01
+        dy = dy > 100 ? dy * 0.001 : dy * 0.01
+
+        this.velocity.x += dx 
+        this.velocity.y += dy 
+
+        if (Math.abs(this.position.x - this.start.x) < 2.0 && Math.abs(this.position.y - this.start.y) < 2.0 &&
+        Math.abs(this.velocity.x) < 0.5 && Math.abs(this.velocity.y) < 0.5) {
             this.position.x = this.start.x;
             this.position.y = this.start.y;
         }
 
+        /*
         let headerW = document.querySelector('.header').getBoundingClientRect().width,
             headerH = document.querySelector('.header').getBoundingClientRect().height
         headerW -= this.width
@@ -31,7 +39,7 @@ class SceneObj{
         if (this.position.x > headerW) this.position.x = headerW
         if (this.position.y > headerH) this.position.y = headerH
         if (this.position.y < 0) this.position.y = 0
-        
+        */
         this.position.x -= 0.1 * this.velocity.x;
         this.position.y -= 0.1 * this.velocity.y;
 
@@ -46,12 +54,12 @@ class SceneObj{
 
     }
     addVelocity(vx, vy) {
-        this.velocity.x += vx
-        this.velocity.y += vy
+        this.velocity.x += vx * 0.5
+        this.velocity.y += vy * 0.5
 
-        if (this.velocity.x > 0.1) this.velocity.x = 0.1
-        if (this.velocity.y > 0.1) this.velocity.y = 0.1
-        this.angle += Math.sqrt(vx*vx+vy*vy) * 0.2
+        //if (this.velocity.x > 0.1) this.velocity.x = 0.1
+        //if (this.velocity.y > 0.1) this.velocity.y = 0.1
+        this.angle += Math.sqrt(vx*vx+vy*vy) * 0.3
     }
     collide() {
         this.velocity.x *= -1
@@ -72,8 +80,8 @@ const pandaSize = 172;
 let pandasArray = [];
 
 const bambooShortPositionX = [0.25, 0.01, 0.74]
-const bambooShortPositionY = [0.9, 0.8, 0.9] 
-const bambooShortAngle = [0, 50, 20]
+const bambooShortPositionY = [0.9, 0.72, 0.9] 
+const bambooShortAngle = [0, -50, 20]
 const bambooShortImgSrc = './img/bambooShort.png';
 const bambooShortSizeX = 155;
 const bambooShortSizeY = 48;
@@ -88,7 +96,10 @@ const bambooLongSizeY = 204;
 let bambooLongArray = [];
 
 window.onload = () => {
-    initScene();
+    if (window.innerWidth < 450) {
+        document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.png';
+    }
+    initScene(false);
     addObjTages();
     editStyle();
     loop();
@@ -104,7 +115,7 @@ function loop() {
     bambooLongArray.forEach(i => {
         i.move();
     });
-    requestAnimationFrame(loop)
+     requestAnimationFrame(loop)
 }
     
 document.addEventListener("mousemove", mouse_move_handler);
@@ -115,7 +126,7 @@ function mouse_move_handler(e) {
     mouse.start.x = e.x
     mouse.start.y = e.y
     if (mouse.end.x == 0 && mouse.end.y == 0) return
-    objMove();   
+    objMove(mouse.end.x - mouse.start.x, mouse.end.y - mouse.start.y);   
 }
 function touch_move_handler(e) {
     let evt = (typeof e.originalEvent === 'undefined') ? e : e.originalEvent;
@@ -126,10 +137,10 @@ function touch_move_handler(e) {
     mouse.start.x = touch.pageX
     mouse.start.y = touch.pageY
     if (mouse.end.x == 0 && mouse.end.y == 0) return
-    objMove();    
+    objMove(0.3 * (mouse.end.x - mouse.start.x), -0.3 * (mouse.end.y - mouse.start.y));    
 }
 
-function objMove() {
+function objMove(dx, dy) {
     //for panda
     for (let index = 0; index < pandasArray.length; index++) {
         const panda = pandasArray[index];
@@ -138,7 +149,7 @@ function objMove() {
         if (Math.abs(centerX - mouse.start.x) < 80 &&
             Math.abs(centerY - mouse.start.y) < 100)
         {
-            panda.addVelocity(mouse.end.x - mouse.start.x, mouse.end.y - mouse.start.y)
+            panda.addVelocity(dx, dy)
         }
     }
     //for short bamboo
@@ -147,7 +158,7 @@ function objMove() {
         if (mouse.start.x > bambooShort.position.x && mouse.start.x < bambooShort.position.x + 2.0*bambooShort.width &&
             mouse.start.y > bambooShort.position.y && mouse.start.y < bambooShort.position.y + 2.0*bambooShort.height)
         {
-            bambooShort.addVelocity(mouse.end.x - mouse.start.x, mouse.end.y - mouse.start.y)
+            bambooShort.addVelocity(dx, dy)
         }
     }
     //for long bamboo
@@ -156,12 +167,12 @@ function objMove() {
         if (mouse.start.x > bambooLong.position.x && mouse.start.x < bambooLong.position.x + bambooLong.width &&
             mouse.start.y > bambooLong.position.y && mouse.start.y < bambooLong.position.y + bambooLong.height)
         {
-            bambooLong.addVelocity(mouse.end.x - mouse.start.x, mouse.end.y - mouse.start.y)
+            bambooLong.addVelocity(dx, dy)
         }
     }
 }
 
-function initScene() {
+function initScene(notChangePosition) {
     pandasArray.length = [];
     bambooShortsArray.length = [];
     bambooLongArray.length = [];
@@ -174,7 +185,9 @@ function initScene() {
         pandasArray.push(new SceneObj(
             'panda',
             width * pandaPositionX[index],
-            height * (pandaPositionY[index] + (1 - koeff) * 0.15),
+            height * (pandaPositionY[index] + (1.0 - koeff) * 0.15),
+            notChangePosition ? width * pandaPositionX[index] : Math.random() * width,
+            notChangePosition ? height * (pandaPositionY[index] + (1.0 - koeff) * 0.15) : height + 200.0,
             koeff * pandaSize,
             koeff * pandaSize,
             pandaAngle[index], index)
@@ -185,7 +198,9 @@ function initScene() {
         bambooShortsArray.push(new SceneObj(
             'bambooShort',
             width * bambooShortPositionX[index],
-            height * (bambooShortPositionY[index] + (1 - koeff) * 0.15),
+            height * (bambooShortPositionY[index] + (1.0 - koeff) * 0.15),
+            notChangePosition ? width * bambooShortPositionX[index] : Math.random() * width,
+            notChangePosition ? height * (bambooShortPositionY[index] + (1.0 - koeff) * 0.15) : height + 200.0,
             koeff * bambooShortSizeX,
             koeff * bambooShortSizeY,
             bambooShortAngle[index], index)
@@ -196,14 +211,21 @@ function initScene() {
         bambooLongArray.push(new SceneObj(
             'bambooLong',
             width * bambooLongPositionX[index],
-            height * (bambooLongPositionY[index] + (1 - koeff) * 0.15),
+            height * (bambooLongPositionY[index] + (1.0 - koeff) * 0.15),
+            notChangePosition ? width * bambooLongPositionX[index] : Math.random() * width,
+            notChangePosition ? height * (bambooLongPositionY[index] + (1.0 - koeff) * 0.15) : height + 200.0,
             koeff * bambooLongSizeX,
             koeff * bambooLongSizeY,
             bambooLongAngle[index], index)
         )
     }
 }
-window.addEventListener('resize', () => { initScene(); editStyle(); });
+window.addEventListener('resize', () => {
+    if (window.innerWidth < 450)
+        document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.png';        
+    else document.getElementsByClassName('navbar__img')[0].src = './img/logo.png';
+    initScene(true); editStyle();
+});
 
 function addObjTages() {
     for (let index = 0; index < pandaPositionX.length; index++) {
