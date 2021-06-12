@@ -76,9 +76,13 @@ const bambooLongSizeX = 126;
 const bambooLongSizeY = 204;
 let bambooLongArray = [];
 
+
+const LOGOSRC = './img/logo.svg';
+const MINILOGOSRC = './img/miniLogo.svg';
+
 window.onload = () => {
     if (window.innerWidth < 450) {
-        document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.png';
+        document.getElementsByClassName('navbar__img')[0].src = MINILOGOSRC;
     }
     initScene(false);
     addObjTages();
@@ -205,8 +209,8 @@ var headerWidth = document.getElementsByClassName('header')[0].clientWidth;
 window.addEventListener('resize', () => {
     //clange logo in nav bar to mini in moblie
     if (window.innerWidth < 450)
-        document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.png';        
-    else document.getElementsByClassName('navbar__img')[0].src = './img/logo.png';
+        document.getElementsByClassName('navbar__img')[0].src = MINILOGOSRC;        
+    else document.getElementsByClassName('navbar__img')[0].src = LOGOSRC;
     //only width resize
     let newHeaderWidth = document.getElementsByClassName('header')[0].clientWidth;
     if (newHeaderWidth !== headerWidth)
