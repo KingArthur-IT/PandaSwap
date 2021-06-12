@@ -11,59 +11,40 @@ class SceneObj{
         this.description = description;
     }
     move() {
+        //mouse displacement
         let dx = this.position.x - this.start.x
         let dy = this.position.y - this.start.y
 
         dx = dx > 100 ? dx * 0.001 : dx * 0.01
         dy = dy > 100 ? dy * 0.001 : dy * 0.01
-
+        //add to velocity
         this.velocity.x += dx 
         this.velocity.y += dy 
-
+        
+        //avoid trembling
         if (Math.abs(this.position.x - this.start.x) < 2.0 && Math.abs(this.position.y - this.start.y) < 2.0 &&
         Math.abs(this.velocity.x) < 0.5 && Math.abs(this.velocity.y) < 0.5) {
             this.position.x = this.start.x;
             this.position.y = this.start.y;
         }
 
-        /*
-        let headerW = document.querySelector('.header').getBoundingClientRect().width,
-            headerH = document.querySelector('.header').getBoundingClientRect().height
-        headerW -= this.width
-        headerH -= this.height
-        
-        if (this.position.x < 0 || this.position.x > headerW || this.position.y < 0 || this.position.y > headerH) {
-            this.collide();
-        }
-        if (this.position.x < 0) this.position.x = 0
-        if (this.position.x > headerW) this.position.x = headerW
-        if (this.position.y > headerH) this.position.y = headerH
-        if (this.position.y < 0) this.position.y = 0
-        */
+        //change position ans angle
         this.position.x -= 0.1 * this.velocity.x;
         this.position.y -= 0.1 * this.velocity.y;
-
         this.angle -= (this.angle - this.startAngle) * 0.01;
         //style
         document.getElementById(this.description + this.id).style.top = this.position.y + 'px'
         document.getElementById(this.description + this.id).style.left = this.position.x + 'px'
         document.getElementById(this.description + this.id).style.transform = 'rotate(' + this.angle + 'deg)'
-    
+        //velocity fading
         this.velocity.x *= 0.99
         this.velocity.y *= 0.99
-
     }
     addVelocity(vx, vy) {
         this.velocity.x += vx * 0.5
         this.velocity.y += vy * 0.5
 
-        //if (this.velocity.x > 0.1) this.velocity.x = 0.1
-        //if (this.velocity.y > 0.1) this.velocity.y = 0.1
-        this.angle += Math.sqrt(vx*vx+vy*vy) * 0.3
-    }
-    collide() {
-        this.velocity.x *= -1
-        this.velocity.y *= -1
+        this.angle += Math.sqrt(vx*vx+vy*vy) * 0.4
     }
 }
 
@@ -137,7 +118,7 @@ function touch_move_handler(e) {
     mouse.start.x = touch.pageX
     mouse.start.y = touch.pageY
     if (mouse.end.x == 0 && mouse.end.y == 0) return
-    objMove(0.3 * (mouse.end.x - mouse.start.x), -0.3 * (mouse.end.y - mouse.start.y));    
+    objMove(0.5 * (mouse.end.x - mouse.start.x), 0.5 * (mouse.end.y - mouse.start.y));    
 }
 
 function objMove(dx, dy) {
@@ -146,8 +127,8 @@ function objMove(dx, dy) {
         const panda = pandasArray[index];
         let centerX = panda.position.x + panda.width * 0.4
         let centerY = panda.position.y + panda.height * 0.4
-        if (Math.abs(centerX - mouse.start.x) < 80 &&
-            Math.abs(centerY - mouse.start.y) < 100)
+        if (Math.abs(centerX - mouse.end.x) < 80 &&
+            Math.abs(centerY - mouse.end.y) < 100)
         {
             panda.addVelocity(dx, dy)
         }
@@ -155,8 +136,8 @@ function objMove(dx, dy) {
     //for short bamboo
     for (let index = 0; index < bambooShortsArray.length; index++) {
         const bambooShort = bambooShortsArray[index];
-        if (mouse.start.x > bambooShort.position.x && mouse.start.x < bambooShort.position.x + 2.0*bambooShort.width &&
-            mouse.start.y > bambooShort.position.y && mouse.start.y < bambooShort.position.y + 2.0*bambooShort.height)
+        if (mouse.end.x > bambooShort.position.x && mouse.end.x < bambooShort.position.x + 2.0*bambooShort.width &&
+            mouse.end.y > bambooShort.position.y && mouse.end.y < bambooShort.position.y + 2.0*bambooShort.height)
         {
             bambooShort.addVelocity(dx, dy)
         }
@@ -164,8 +145,8 @@ function objMove(dx, dy) {
     //for long bamboo
     for (let index = 0; index < bambooLongArray.length; index++) {
         const bambooLong = bambooLongArray[index];
-        if (mouse.start.x > bambooLong.position.x && mouse.start.x < bambooLong.position.x + bambooLong.width &&
-            mouse.start.y > bambooLong.position.y && mouse.start.y < bambooLong.position.y + bambooLong.height)
+        if (mouse.end.x > bambooLong.position.x && mouse.end.x < bambooLong.position.x + bambooLong.width &&
+            mouse.end.y > bambooLong.position.y && mouse.end.y < bambooLong.position.y + bambooLong.height)
         {
             bambooLong.addVelocity(dx, dy)
         }
@@ -179,7 +160,7 @@ function initScene(notChangePosition) {
 
     let width = document.querySelector('.header').getBoundingClientRect().width,
         height = document.querySelector('.header').getBoundingClientRect().height,
-        koeff = height < width ? (height > 1024 ? 1.0 : 1.0 - (1024 - height) / 1024) : (width > 1440 ? 1.0 : 1.0 - (1440 - width) / 1440)
+        koeff = height < width ? (height > 1024 ? 1.0 : 1.0 - (1024 - height) / 1200) : (width > 1440 ? 1.0 : 1.0 - (1440 - width) / 1600)
     //create pandas
     for (let index = 0; index < pandaPositionX.length; index++) {
         pandasArray.push(new SceneObj(
@@ -220,11 +201,16 @@ function initScene(notChangePosition) {
         )
     }
 }
+var headerWidth = document.getElementsByClassName('header')[0].clientWidth;
 window.addEventListener('resize', () => {
+    //clange logo in nav bar to mini in moblie
     if (window.innerWidth < 450)
         document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.png';        
     else document.getElementsByClassName('navbar__img')[0].src = './img/logo.png';
-    initScene(true); editStyle();
+    //only width resize
+    let newHeaderWidth = document.getElementsByClassName('header')[0].clientWidth;
+    if (newHeaderWidth !== headerWidth)
+    { initScene(true); editStyle(); headerWidth = newHeaderWidth;}
 });
 
 function addObjTages() {

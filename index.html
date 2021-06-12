@@ -20,7 +20,9 @@
 <body>
     <nav class="navbar">
         <div class="navbar__logo">
-            <img src="./img/logo.png" alt="Pandaswap" class="navbar__img">
+            <a href="index.html">
+                <img src="./img/logo.svg" alt="Pandaswap" class="navbar__img">
+            </a>            
         </div>
         <div class="menu">
             <div class="menu__item">Swap</div>
@@ -39,6 +41,11 @@
             <input type="button" value="Launch APP" class="btn header__btn">
         </div>
     </header>
+    <script>
+        //quick change logo to mini logo in mobile 
+        if (window.innerWidth < 450)
+            document.getElementsByClassName('navbar__img')[0].src = './img/miniLogo.svg';
+    </script>
     <script src="./js/main.js"></script>
 </body>
 </html>

@@ -54,15 +54,14 @@ body {
   display: -ms-flexbox;
   display: flex;
   z-index: 2;
-  cursor: pointer;
 }
 
 .menu__item {
   position: relative;
   display: block;
-  height: 43px;
+  height: 45px;
   min-width: 32px;
-  margin-top: auto;
+  padding-top: 35px;
   margin-right: 37px;
   font-family: 'Lexend', sans-serif;
   font-weight: 600;
@@ -72,6 +71,7 @@ body {
   -webkit-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .menu__item:after {
