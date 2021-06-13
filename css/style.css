@@ -7,7 +7,7 @@
 body {
   position: relative;
   color: #282828;
-  cursor: url("../img/cursor.png"), auto;
+  cursor: url("../img/cursor.svg"), auto;
 }
 
 .btn {
