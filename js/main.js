@@ -22,7 +22,7 @@ class SceneObj{
         this.velocity.y += dy 
         
         //avoid trembling
-        if (Math.abs(this.position.x - this.start.x) < 2.0 && Math.abs(this.position.y - this.start.y) < 2.0 &&
+        if (Math.abs(this.position.x - this.start.x) < 3.0 && Math.abs(this.position.y - this.start.y) < 3.0 &&
         Math.abs(this.velocity.x) < 0.5 && Math.abs(this.velocity.y) < 0.5) {
             this.position.x = this.start.x;
             this.position.y = this.start.y;
