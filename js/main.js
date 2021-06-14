@@ -186,7 +186,7 @@ function initScene(notChangePosition) {
 
     let width = document.querySelector('.header').getBoundingClientRect().width,
         height = document.querySelector('.header').getBoundingClientRect().height,
-        koeff = height < width ? (height > 1024 ? 1.0 : 1.0 - (1024 - height) / 1200) : (width > 1440 ? 1.0 : 1.0 - (1440 - width) / 1600)
+        koeff = height < width ? (height > 1024 ? 1.0 : 1.0 - (1024 - height) / 1200) : (width > 1440 ? 1.0 : 1.0 - (1440 - width) / 1700)
     //create pandas
     for (let index = 0; index < pandaPositionX.length; index++) {
         pandasArray.push(new SceneObj(
