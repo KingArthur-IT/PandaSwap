@@ -21,6 +21,9 @@ body {
   font-size: 20px;
   border: none;
   cursor: pointer;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 .navbar {

@@ -53,16 +53,23 @@ let mouse = {
     end: {x: 0, y: 0}
 }
 
-const pandaPositionX = [0.05, 0.5, 0.3, 0.69, 0.88]
-const pandaPositionY = [0.78,  0.78, 0.75, 0.6, 0.77] 
-const pandaAngle = [0, -20, -120, 20, 45]
+const pandaPositionX = [0.05, 0.32, 0.5, 0.68, 0.85]
+const pandaPositionY = [0.78, 0.65, 0.8, 0.6, 0.8] 
+const pandaAngle = [-25, 20, -120, 0, 40]
 const pandaImgSrc = './img/panda.png';
 const pandaSize = 172;
 let pandasArray = [];
 
-const bambooShortPositionX = [0.25, 0.01, 0.74]
-const bambooShortPositionY = [0.9, 0.72, 0.9] 
-const bambooShortAngle = [0, -50, 20]
+const pandaBackPositionX = [-0.04, 0.25, 0.95]
+const pandaBackPositionY = [0.6, 0.9, 0.6] 
+const pandaBackAngle = [-100, 0, -100]
+const pandaBackImgSrc = './img/pandaBack.png';
+const pandaBackSize = 172;
+let pandasBackArray = [];
+
+const bambooShortPositionX = [0.05, 0.25, 0.74]
+const bambooShortPositionY = [0.68, 0.82, 0.9] 
+const bambooShortAngle = [-50, 0, 20]
 const bambooShortImgSrc = './img/bambooShort.png';
 const bambooShortSizeX = 155;
 const bambooShortSizeY = 48;
@@ -84,7 +91,7 @@ window.onload = () => {
     if (window.innerWidth < 450) {
         document.getElementsByClassName('navbar__img')[0].src = MINILOGOSRC;
     }
-    initScene(false);
+    initScene(true);
     addObjTages();
     editStyle();
     loop();
@@ -92,6 +99,9 @@ window.onload = () => {
 //loop
 function loop() {
     pandasArray.forEach(i => {
+        i.move();
+    });
+    pandasBackArray.forEach(i => {
         i.move();
     });
     bambooShortsArray.forEach(i => {
@@ -137,6 +147,17 @@ function objMove(dx, dy) {
             panda.addVelocity(dx, dy)
         }
     }
+    //for back panda
+    for (let index = 0; index < pandasBackArray.length; index++) {
+        const panda = pandasBackArray[index];
+        let centerX = panda.position.x + panda.width * 0.4
+        let centerY = panda.position.y + panda.height * 0.4
+        if (Math.abs(centerX - mouse.end.x) < 80 &&
+            Math.abs(centerY - mouse.end.y) < 100)
+        {
+            panda.addVelocity(dx, dy)
+        }
+    }
     //for short bamboo
     for (let index = 0; index < bambooShortsArray.length; index++) {
         const bambooShort = bambooShortsArray[index];
@@ -159,6 +180,7 @@ function objMove(dx, dy) {
 
 function initScene(notChangePosition) {
     pandasArray.length = [];
+    pandasBackArray.length = [];
     bambooShortsArray.length = [];
     bambooLongArray.length = [];
 
@@ -176,6 +198,19 @@ function initScene(notChangePosition) {
             koeff * pandaSize,
             koeff * pandaSize,
             pandaAngle[index], index)
+        )
+    }
+    //create back pandas
+    for (let index = 0; index < pandaBackPositionX.length; index++) {
+        pandasBackArray.push(new SceneObj(
+            'pandaBack',
+            width * pandaBackPositionX[index],
+            height * (pandaBackPositionY[index] + (1.0 - koeff) * 0.15),
+            notChangePosition ? width * pandaBackPositionX[index] : Math.random() * width,
+            notChangePosition ? height * (pandaBackPositionY[index] + (1.0 - koeff) * 0.15) : height + 200.0,
+            koeff * pandaBackSize,
+            koeff * pandaBackSize,
+            pandaBackAngle[index], index)
         )
     }
     //create short bamboo
@@ -221,6 +256,9 @@ function addObjTages() {
     for (let index = 0; index < pandaPositionX.length; index++) {
         document.querySelector('.header').innerHTML += '<img src="' + pandaImgSrc + '" alt="panda" class="sceneObj" id = "panda' + index + '">';
     }
+    for (let index = 0; index < pandaBackPositionX.length; index++) {
+        document.querySelector('.header').innerHTML += '<img src="' + pandaBackImgSrc + '" alt="panda" class="sceneObj" id = "pandaBack' + index + '">';
+    }
     for (let index = 0; index < bambooShortPositionX.length; index++) {
         document.querySelector('.header').innerHTML += '<img src="' + bambooShortImgSrc + '" alt="bamboo" class="sceneObj" id = "bambooShort' + index + '">';
     }
@@ -233,6 +271,10 @@ function editStyle() {
     pandasArray.forEach(i => {
         document.getElementById('panda' + i.id).style.width = i.width + 'px'
         document.getElementById('panda' + i.id).style.height = i.height + 'px'
+    });
+    pandasBackArray.forEach(i => {
+        document.getElementById('pandaBack' + i.id).style.width = i.width + 'px'
+        document.getElementById('pandaBack' + i.id).style.height = i.height + 'px'
     });
     bambooShortsArray.forEach(i => {
         document.getElementById('bambooShort' + i.id).style.width = i.width + 'px'
