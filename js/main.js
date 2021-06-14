@@ -91,7 +91,7 @@ window.onload = () => {
     if (window.innerWidth < 450) {
         document.getElementsByClassName('navbar__img')[0].src = MINILOGOSRC;
     }
-    initScene(true);
+    initScene(false);
     addObjTages();
     editStyle();
     loop();
