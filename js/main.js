@@ -53,16 +53,16 @@ let mouse = {
     end: {x: 0, y: 0}
 }
 
-const pandaPositionX = [0.05, 0.32, 0.5, 0.68, 0.85]
-const pandaPositionY = [0.78, 0.65, 0.8, 0.6, 0.8] 
-const pandaAngle = [-25, 20, -120, 0, 40]
+const pandaPositionX = [0.05, 0.3, 0.38, 0.7, 0.85, 0.45, 0.58, 0.2, 0.85, 0.56, -0.01]
+const pandaPositionY = [0.78, 0.5, 0.78, 0.7, 0.8, 0.55, 0.38, 0.62, 0.4, 0.8, 0.4] 
+const pandaAngle = [-25, -20, -150, 20, 40, 20, -40, 45, 150, -25, 30]
 const pandaImgSrc = './img/panda.png';
 const pandaSize = 172;
 let pandasArray = [];
 
-const pandaBackPositionX = [-0.04, 0.25, 0.95]
-const pandaBackPositionY = [0.6, 0.9, 0.6] 
-const pandaBackAngle = [-100, 0, -100]
+const pandaBackPositionX = [-0.04, 0.23, 0.95, 0.7]
+const pandaBackPositionY = [0.65, 0.9, 0.6, 0.5] 
+const pandaBackAngle = [-100, 0, -100, 60]
 const pandaBackImgSrc = './img/pandaBack.png';
 const pandaBackSize = 172;
 let pandasBackArray = [];
@@ -75,9 +75,9 @@ const bambooShortSizeX = 155;
 const bambooShortSizeY = 48;
 let bambooShortsArray = [];
 
-const bambooLongPositionX = [0.8, 0.55]
-const bambooLongPositionY = [0.6, 0.55] 
-const bambooLongAngle = [135, 20]
+const bambooLongPositionX = [0.8, 0.56]
+const bambooLongPositionY = [0.69, 0.6] 
+const bambooLongAngle = [135, 0]
 const bambooLongImgSrc = './img/bambooLong.png';
 const bambooLongSizeX = 126;
 const bambooLongSizeY = 204;
@@ -91,7 +91,7 @@ window.onload = () => {
     if (window.innerWidth < 450) {
         document.getElementsByClassName('navbar__img')[0].src = MINILOGOSRC;
     }
-    initScene(false);
+    initScene(true);
     addObjTages();
     editStyle();
     loop();
